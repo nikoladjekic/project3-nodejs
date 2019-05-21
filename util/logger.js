@@ -10,14 +10,14 @@ module.exports = createLogger({
         new transports.File({
             maxsize: 5555000,
             maxFiles: 5,
-            filename: `${__dirname}/../logs/combined.log`
+            filename: `../logs/combined.log`
 
         }),
         new transports.File({
             level: 'error',
             maxsize: 5555000,
             maxFiles: 5,
-            filename: `${__dirname}/../logs/errors.log`
+            filename: `../logs/errors.log`
 
         }),
         new transports.Console({
