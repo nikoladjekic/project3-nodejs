@@ -7,18 +7,18 @@ const jwt = require('jsonwebtoken');
 /******* GET ALL Subscriptions ********/
 const getAllSubscriptions = (req, res, next) => {
     Subscription.find().then(function (subscriptions) {
-        logger.info('Show all Subscriptions requested ');
-        res.send(subscriptions);
+        logger.info('Show all subscriptions requested ')
+        res.send(subscriptions)
     }).catch(function (err) {
-        logger.error('Show all Subscriptions failed' + err);
-        res.status(404).send("Cannot find Subscriptions");
+        logger.error('Show all subscriptions failed' + err)
+        res.status(404).send("Cannot find Subscriptions")
     })
 };
 
 /******* FIND USER BY ID ********/
 const getSubscriptionByID = (req, res, next) => {
     let subscription_id = req.params.id;
-    logger.info('Show user by ID : ' + subscription_id);
+    logger.info('Show user by ID : ' + subscription_id)
     Subscription.find({ _id: subscription_id })
         .then(subscription => {
             if (subscription.length > 0) {
@@ -32,19 +32,19 @@ const getSubscriptionByID = (req, res, next) => {
         })
 };
 
-// Create Subscription
+/******* CREATE SUBSCRIPTION ********/
 const createSubscription = (req, res, next) => {
-    let newSubscription = new Subscription(req.body);
+    let newSubscription = new Subscription(req.body)
     newSubscription.save().then(subscription => {
        res.status(200).send(subscription);
-       logger.info('Subscription is successfully created.');
+       logger.info('Subscription is successfully created.')
     }).catch((err) => {
-        res.status(404).send('Failed to create subscription.');
-        logger.error('Failed to create subscription.' + err);
+        res.status(404).send('Failed to create subscription.')
+        logger.error('Failed to create subscription.' + err)
     })
 };
 
-// Delete Subscription
+/******* DELETE SUBSCRIPTION ********/
 const deleteSubscription = (req, res, next) => {
     let subscriptionId = req.params.id;
     Subscription.remove({ _id: subscriptionId })
@@ -63,18 +63,18 @@ const deleteSubscription = (req, res, next) => {
         })
 };
 
-// Update Subscription
+/******* UPDATE SUBSCRIPTION ********/
 const updateSubscription = (req,res,next) => {
     Subscription.updateOne({ _id: req.body._id }, req.body)
     .then(function (subscription) {
         if (subscription.nModified < 1) {
-            res.status(404).send("Subscription is not modified");
+            res.status(404).send("Subscription is not modified")
         } else {
-            res.send(subscription);
+            res.send(subscription)
         }
     }).catch(function (err) {
-        logger.error("Cannot update subscription - " + err);
-        res.status(404).send("Cannot update subscription");
+        logger.error("Cannot update subscription - " + err)
+        res.status(404).send("Cannot update subscription")
     })   
 };
 

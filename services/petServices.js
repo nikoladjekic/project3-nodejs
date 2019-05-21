@@ -14,7 +14,7 @@ const createPet = (req, res, next) => {
     })
 };
 
-//Delete pet by Id
+/******* DELETE PET BY ID ********/
 const deletePetById = (req, res, next) => {
     let petId = req.params.id;
     Pet.remove({ _id: petId })
@@ -33,7 +33,7 @@ const deletePetById = (req, res, next) => {
         })
 };
 
-// Update pet
+/******* UPDATE PET  ********/
 const updatePet = (req, res, next) => {
     Pet.updateOne({ _id: req.body._id }, req.body)
     .then(function (pet) {
@@ -50,7 +50,7 @@ const updatePet = (req, res, next) => {
     })
 };
 
-// Get all pets
+/******* GET ALL PETS  ********/
 const getAllPets = (req, res, next) => {
     Pet.find() 
     .then(pet => {
@@ -63,7 +63,7 @@ const getAllPets = (req, res, next) => {
     });
 };
 
-// Get pet by Id
+/******* GET PET BY ID  ********/
 const getPetById = (req, res, next) => {
     Pet.findOne({_id: req.params.id})
     .then(pet => {
