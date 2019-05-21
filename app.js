@@ -1,15 +1,11 @@
 const express = require('express');
 
 const path = require('./util/path');
-const connection = require('./database/db');
-const petRoutes = require('./routes/petRoutes');;
+const petRoutes = require('./routes/petRoutes');
 
 const app = express();
 
-app.use(express.json().urlencoded({
-    extended: false
-}));
-
+app.use(express.json());
 
 app.use('/api/pets', petRoutes);
 
