@@ -5,11 +5,13 @@ const {
     getAllSubscriptions,
     getSubscriptionByID,
     createSubscription,
-    deleteSubscription
+    deleteSubscription,
+    updateSubscription
 } = require('../services/subscriptionServices');
 
 router.get('/', getAllSubscriptions);
 router.get('/:id', getSubscriptionByID);
+router.put('/', updateSubscription);
 router.post('/', createSubscription);
 router.delete('/:id', deleteSubscription);
 

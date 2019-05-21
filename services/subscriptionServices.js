@@ -63,10 +63,25 @@ const deleteSubscription = (req, res, next) => {
         })
 };
 
+// Update Subscription
+const updateSubscription = (req,res,next) => {
+    Subscription.updateOne({ _id: req.body._id }, req.body)
+    .then(function (subscription) {
+        if (subscription.nModified < 1) {
+            res.status(404).send("Subscription is not modified");
+        } else {
+            res.send(subscription);
+        }
+    }).catch(function (err) {
+        logger.error("Cannot update subscription - " + err);
+        res.status(404).send("Cannot update subscription");
+    })   
+};
 
 module.exports = {
     createSubscription,
     deleteSubscription,
     getAllSubscriptions,
-    getSubscriptionByID
+    getSubscriptionByID,
+    updateSubscription
 }
