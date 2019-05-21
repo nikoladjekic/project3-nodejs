@@ -9,7 +9,7 @@ let forwardJsonPetData = (req, res) => {
         },
         json: true,
     }).then((resp) => {
-        if (resp.subscriptions == 'undefined') {
+        if (resp.subscriptions === undefined) {
             res.status(200).send('Pet added to mongodb');
         } else {
             rp({
@@ -18,12 +18,37 @@ let forwardJsonPetData = (req, res) => {
                     body: req.body.petData,
                     json: true
                 })
-                .then((resp) => res.send(resp))
+                .then((resp) => res.send('Pet was added to mongodb and mysql'))
+                .catch((err) => res.send(err));
+        }
+    }).catch((err) => console.log(err));
+};
+
+let deletePetJson = (req, res) => {
+    rp({
+        method: 'DELETE',
+        url: 'https://postman-echo.com/delete',
+        body: {
+            petData: req.body.petId
+        },
+        json: true,
+    }).then((resp) => {
+        if (resp.subscriptions === undefined) {
+            res.status(200).send('Pet deleted from mongodb');
+        } else {
+            rp({
+                    method: 'DELETE',
+                    url: 'https://postman-echo.com/delete',
+                    body: req.body.petId,
+                    json: true
+                })
+                .then((resp) => res.send('The pet was deleted in mysql and mongodb'))
                 .catch((err) => res.send(err));
         }
     }).catch((err) => console.log(err));
 };
 
 module.exports = {
-    forwardJsonPetData
+    forwardJsonPetData,
+    deletePetJson
 }
