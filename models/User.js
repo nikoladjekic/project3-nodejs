@@ -33,7 +33,11 @@ let UserSchema = new Schema({
         required: [true, 'This field must be filled'],
         trim: true,
         validate: [validatePass, 'You password must be atleast 8 characters long']
-    }
+    },
+    subscription:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 });
 
 let User = mongoose.model('User', UserSchema);
