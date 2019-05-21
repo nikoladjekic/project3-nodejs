@@ -10,5 +10,10 @@ const connection = mongoose.connect(db_url, {
     useCreateIndex: true
 });
 
+if(mongoose.connection.readyState === 2){
+    console.log("Connection to MongoDB is created.");
+}else{
+    console.log("Failed to connect to MongoDB.");
+}
 
 module.exports = connection;
