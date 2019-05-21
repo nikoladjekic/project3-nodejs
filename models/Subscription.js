@@ -44,7 +44,10 @@ const SubscriptionSchema = new Schema({
     },
     expires: {
         type: Date,
-        required: true
+        required: true,
+        default: function() {
+           return Date.now() + 3*86400000;
+        }
     },
     status: {
         type: Boolean,

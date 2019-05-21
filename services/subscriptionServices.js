@@ -2,8 +2,7 @@ const Subscription = require('../models/Subscription');
 const logger = require('../util/logger');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+
 
 /******* GET ALL Subscriptions ********/
 const getAllSubscriptions = (req, res, next) => {
@@ -33,7 +32,41 @@ const getSubscriptionByID = (req, res, next) => {
         })
 };
 
+// Create Subscription
+const createSubscription = (req, res, next) => {
+    let newSubscription = new Subscription(req.body);
+    newSubscription.save().then(subscription => {
+       res.status(200).send(subscription);
+       logger.info('Subscription is successfully created.');
+    }).catch((err) => {
+        res.status(404).send('Failed to create subscription.');
+        logger.error('Failed to create subscription.' + err);
+    })
+};
+
+// Delete Subscription
+const deleteSubscription = (req, res, next) => {
+    let subscriptionId = req.params.id;
+    Subscription.remove({ _id: subscriptionId })
+        .then(subscription => {
+            if(subscription.deletedCount > 0){
+                res.status(200).send(subscription)
+                logger.info(`Subscription is successfully removed.`)
+            }else{
+                res.status(404).send(`Failed to find subscription with id ${subscriptionId}.`)
+                logger.error(`Failed remove subscription.`)
+            }
+        })
+        .catch((err) => {
+            res.status(404).send(`Failed to find subscription with id ${subscriptionId}.`)
+            logger.error(`Failed remove subscription.` + err)
+        })
+};
+
+
 module.exports = {
+    createSubscription,
+    deleteSubscription,
     getAllSubscriptions,
     getSubscriptionByID
 }
