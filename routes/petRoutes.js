@@ -3,11 +3,17 @@ const router = express.Router();
 
 const {
     createPet,
-    deletePetById
+    deletePetById,
+    updatePet,
+    getAllPets,
+    getPetById
 } = require('../services/petServices');
 
 
 router.post('/', createPet);
 router.delete('/:id', deletePetById);
+router.put('/', updatePet);
+router.get('/all', getAllPets);
+router.get('/:id', getPetById);
 
 module.exports = router;
