@@ -1,10 +1,10 @@
-const {createLogger, format ,transports} = require('winston');
+const { createLogger, format, transports } = require('winston');
 
 module.exports = createLogger({
     format: format.combine(
         format.simple(),
         format.timestamp(),
-        format.printf( info => `[${info.timestamp}][${info.level}] ${info.message}`)
+        format.printf(info => `[${info.timestamp}][${info.level}] ${info.message}`)
     ),
     transports: [
         new transports.File({
@@ -14,7 +14,7 @@ module.exports = createLogger({
 
         }),
         new transports.File({
-            level:'error',
+            level: 'error',
             maxsize: 5555000,
             maxFiles: 5,
             filename: `${__dirname}/../logs/errors.log`
@@ -25,7 +25,7 @@ module.exports = createLogger({
         })
     ],
     exceptionHandlers: [
-        new winston.transports.File({
+        new transports.File({
             filename: '../logs/exceptions.log'
         })
     ]

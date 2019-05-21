@@ -1,16 +1,12 @@
 const express = require('express')
 const router = express.Router();
 
-// const { 
-//     createUser,
-//     getToken,
-//     updateUser,
-//     deleteUser,
-//     getAllUsers
-// } = require('../services/userServices');
+const {
+    addUser
+} = require('../services/userServices');
 
 
-// router.post('/', createUser);
+router.post('/', addUser);
 // router.get('/all', getAllUsers);
 // router.get('/login', getToken);
 // router.put('/', updateUser);
