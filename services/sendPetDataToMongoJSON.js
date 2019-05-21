@@ -3,19 +3,20 @@ let rp = require('request-promise');
 let forwardJsonPetData = (req, res) => {
     rp({
         method: 'POST',
-        url: '',
+        url: 'https://postman-echo.com/post',
         body: {
             petData: req.body.petData
         },
         json: true,
     }).then((resp) => {
-        // expecting subscription info
-        if (resp.subscriptions === 'null') {
+        if (resp.subscriptions == 'undefined') {
             res.status(200).send('Pet added to mongodb');
         } else {
             rp({
-                    url: '',
+                    method: 'POST',
+                    url: 'https://postman-echo.com/post',
                     body: req.body.petData,
+                    json: true
                 })
                 .then((resp) => res.send(resp))
                 .catch((err) => res.send(err));
@@ -23,4 +24,6 @@ let forwardJsonPetData = (req, res) => {
     }).catch((err) => console.log(err));
 };
 
-module.exports = {forwardJsonPetData}
+module.exports = {
+    forwardJsonPetData
+}
