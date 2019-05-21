@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const logger = require('../util/logger');
 const database = require('../util/config').database;
 
 const db_url = 'mongodb+srv://' + database.user + ':' + database.password + '@nodeproject-tu8wo.mongodb.net/'+ database.name +'?retryWrites=true';
@@ -12,8 +13,10 @@ const connection = mongoose.connect(db_url, {
 
 if(mongoose.connection.readyState === 2){
     console.log("Connection to MongoDB is created.");
+    logger.info('Connection to MongoDB is created.');
 }else{
     console.log("Failed to connect to MongoDB.");
+    logger.error('Failed to connect to MongoDB.');
 }
 
 module.exports = connection;
