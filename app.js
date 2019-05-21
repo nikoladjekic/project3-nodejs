@@ -1,13 +1,13 @@
 const express = require('express');
 
 const path = require('./util/path');
-const petJsonRoutes = require('./routes/petJSONRoutes');
+const petRoutes = require('./routes/petRoutes');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/api/pets', petJsonRoutes);
+app.use('/api/pets', petRoutes);
 
 
 // if no route matches, send 404 response
