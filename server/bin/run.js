@@ -1,9 +1,8 @@
 "use strict";
 
 const app = require('../../app');
-const serverPort = require('../../util/config');
+const port = (require('../../util/config') || 3000);
 
-
-app.listen((serverPort || 3000), () => {
-    console.log(`Express server started, listening on port ${serverPort}`);
+app.listen(port, () => {
+    console.log(`Express server started, listening on port ${port}`);
 });
