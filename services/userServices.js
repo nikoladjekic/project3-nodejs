@@ -90,8 +90,6 @@ const login = (req, res) => {
     let password = req.body.password;
 
     User.findOne({ username: username }).then(function (user) {
-
-        // res.send(user.username);
         let salt = user.salt;
 
         UserD = new User();
@@ -109,7 +107,7 @@ const login = (req, res) => {
             res.status(404).send("Wrong password");
         }
     }).catch(function (err) {
-        //console.log(err);
+
         logger.error("Cannot find user - " + err);
         res.status(404).send("Cannot find user");
     });

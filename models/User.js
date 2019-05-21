@@ -70,6 +70,7 @@ UserSchema.methods.validPassword = function (userPassword, hashPassword, s) {
 
     var salt = s;
     var hash = crypto.pbkdf2Sync(userPassword, new Buffer(salt, 'base64'), 10000, 64, 'sha1').toString('base64');
+
     return hashPassword === hash;
 };
 

@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const SubscriptionSchema = new Schema({
-    user_id:{
+    user_id: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    description:{
+    description: {
         type: String,
         required: true
     },
-    subject:{
+    subject: {
         entities: {
             idPattern: {
                 type: [String],
@@ -31,7 +31,7 @@ const SubscriptionSchema = new Schema({
             }
         }
     },
-    notification:{
+    notification: {
         http: {
             url: {
                 type: String,
@@ -39,10 +39,10 @@ const SubscriptionSchema = new Schema({
             }
         }
     },
-    attrsFormat:{
+    attrsFormat: {
         type: String
     },
-    expires:{
+    expires: {
         type: Date,
         required: true
     },
