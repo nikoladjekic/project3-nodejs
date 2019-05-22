@@ -20,6 +20,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "crypto": "^1.0.1",
+    "csvtojson": "^2.0.8",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
