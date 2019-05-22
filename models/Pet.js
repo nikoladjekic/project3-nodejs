@@ -17,10 +17,10 @@ const Pet = sequelize.define('pet', {
     allowNull: false
   },
   status: {
-    type: Sequelize.STRING,
-    enum: ["AVAILABLE", "PENDING", "SOLD"],
-    default: "AVAILABLE"
+    type: Sequelize.ENUM,
+    values: ["AVAILABLE", "PENDING", "SOLD"]
   }
 });
+
 
 module.exports = Pet;

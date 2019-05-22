@@ -30,7 +30,7 @@ const getUsers = (req, res, next) => {
 }
 
 const getUserById = (req, res, next) => {
-    User.findOne({where:{id:req.params.id}}).
+    User.findOne({ where: { id: req.params.id } }).
         then(
             user => {
                 logger.info("User has been found by id");
@@ -44,10 +44,53 @@ const getUserById = (req, res, next) => {
         )
 }
 
+const deleteUser = (req, res, next) => {
+    User.destroy({ where: { id: req.params.id } }).
+        then(
+            () => {
+                logger.info("User has been successfully deleted");
+                res.status(200).send("User has been successfully deleted")
+            }
+        ).catch(
+            err => {
+                res.status(404).send("Failed to delete user by id");
+                console.log(err);
+            }
+        )
+}
+
+
+const updateUser = (req, res, next) => {
+    if (!req.body.username) {
+        res.status(400).send("You have provided bad data")
+    } else {
+        User.update({
+            username: req.body.username,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: req.body.password
+        },
+            { where: { id: req.params.id } }).
+            then(
+                () => {
+                    logger.info("User has been successfully updated");
+                    res.status(200).send("User has been successfully updated")
+                }
+            ).catch(
+                err => {
+                    res.status(404).send("Failed to update user by id");
+                    console.log(err);
+                }
+            )
+    }
+}
 
 
 module.exports = {
     createUser,
     getUsers,
-    getUserById
+    getUserById,
+    deleteUser,
+    updateUser
 }

@@ -44,8 +44,52 @@ const getPetById = (req, res, next) => {
 }
 
 
+const deletePet= (req, res, next) => {
+    Pet.destroy({where:{id:req.params.id}}).
+        then(
+            () => {
+                logger.info("Pet has been successfully deleted");
+                res.status(200).send("Pet has been successfully deleted")
+            }
+        ).catch(
+            err => {
+                res.status(404).send("Failed to delete pet by id");
+                console.log(err);
+            }
+        )
+}
+
+const updatePet = (req, res, next) => {
+    if (!req.body.name) {
+        res.status(400).send("You have provided bad data")
+    } else {
+        Pet.update({
+            name: req.body.name,
+            category: req.body.category,
+            status: req.body.status,
+        },
+            { where: { id: req.params.id } }).
+            then(
+                () => {
+                    logger.info("Pet has been successfully updated");
+                    res.status(200).send("Pet has been successfully updated")
+                }
+            ).catch(
+                err => {
+                    res.status(404).send("Failed to update pet by id");
+                    console.log(err);
+                }
+            )
+    }
+}
+
+
+
+
 module.exports = {
     createPet,
     getPets,
-    getPetById
+    getPetById,
+    deletePet,
+    updatePet
 }
