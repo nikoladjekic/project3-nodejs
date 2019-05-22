@@ -64,8 +64,10 @@ let updatePetJson = (req, res) => {
             rp({
                     method: 'PUT',
                     url: 'https://postman-echo.com/put',
-                    body: req.body.petId,
-                    newPetData: req.body.newPetData,
+                    body: {
+                        pedId: req.body.petId,
+                        newPetData: req.body.newPetData
+                    },
                     json: true
                 })
                 .then((resp) => res.send('The pet was updated in mysql and mongodb'))
