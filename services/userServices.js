@@ -109,7 +109,6 @@ const login = (req, res) => {
             res.status(404).send("Wrong password");
         }
     }).catch(function (err) {
-
         logger.error("Cannot find user - " + err);
         res.status(404).send("Cannot find user");
     });
