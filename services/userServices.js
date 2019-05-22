@@ -23,6 +23,7 @@ const addUser = (req, res, next) => {
 
 /******* GET ALL USERS ********/
 const getAllUsers = (req, res, next) => {
+    console.log(req.username);
     User.find().then(function (users) {
         logger.info('Show all users requested ');
         res.send(users);
@@ -113,11 +114,50 @@ const login = (req, res) => {
     });
 
 };
+
+const isAuth = (req, res, next) => {
+
+    logger.info("POST request - verifyTokenRoute ... ");
+    jwt.verify(req.token, 'secretkey', (err, authData) => {
+        console.log(authData.user.username);
+        req.username = authData.user.username;
+        if (err) {
+            res.status(403).send("Forbidden");
+        } else {
+            logger.info("Token is correct");
+            next();
+        }
+
+    })
+
+};
+
+
+
+const verifyToken = (req, res, next) => {
+    logger.info("POST request - verifyToken ... ");
+    const bearerHeader = req.headers['authorization'];
+
+    if (typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(' ');
+
+        const bearerToken = bearer[1];
+
+        req.token = bearerToken;
+
+        next();
+    } else {
+        res.status(403).send("Forbidden");
+    }
+
+};
 module.exports = {
     addUser,
     getAllUsers,
     getUserByID,
     deleteUser,
     updateUser,
-    login
+    login,
+    isAuth,
+    verifyToken
 }

@@ -36,8 +36,8 @@ const getSubscriptionByID = (req, res, next) => {
 const createSubscription = (req, res, next) => {
     let newSubscription = new Subscription(req.body);
     newSubscription.save().then(subscription => {
-       res.status(200).send(subscription);
-       logger.info('Subscription is successfully created.');
+        res.status(200).send(subscription);
+        logger.info('Subscription is successfully created.');
     }).catch((err) => {
         res.status(404).send('Failed to create subscription.');
         logger.error('Failed to create subscription.' + err);
@@ -49,10 +49,10 @@ const deleteSubscription = (req, res, next) => {
     let subscriptionId = req.params.id;
     Subscription.remove({ _id: subscriptionId })
         .then(subscription => {
-            if(subscription.deletedCount > 0){
+            if (subscription.deletedCount > 0) {
                 res.status(200).send(subscription)
                 logger.info(`Subscription is successfully removed.`)
-            }else{
+            } else {
                 res.status(404).send(`Failed to find subscription with id ${subscriptionId}.`)
                 logger.error(`Failed remove subscription.`)
             }
@@ -64,19 +64,21 @@ const deleteSubscription = (req, res, next) => {
 };
 
 // Update Subscription
-const updateSubscription = (req,res,next) => {
+const updateSubscription = (req, res, next) => {
     Subscription.updateOne({ _id: req.body._id }, req.body)
-    .then(function (subscription) {
-        if (subscription.nModified < 1) {
-            res.status(404).send("Subscription is not modified");
-        } else {
-            res.send(subscription);
-        }
-    }).catch(function (err) {
-        logger.error("Cannot update subscription - " + err);
-        res.status(404).send("Cannot update subscription");
-    })   
+        .then(function (subscription) {
+            if (subscription.nModified < 1) {
+                res.status(404).send("Subscription is not modified");
+            } else {
+                res.send(subscription);
+            }
+        }).catch(function (err) {
+            logger.error("Cannot update subscription - " + err);
+            res.status(404).send("Cannot update subscription");
+        })
 };
+
+
 
 module.exports = {
     createSubscription,

@@ -9,10 +9,15 @@ const {
     getPetById
 } = require('../services/petServices');
 
+const {
+    verifyToken,
+    isAuth
+} = require('../services/userServices');
+
 
 router.post('/', createPet);
-router.delete('/:id', deletePetById);
-router.put('/', updatePet);
+router.delete('/:id', verifyToken, isAuth, deletePetById);
+router.put('/', verifyToken, isAuth, updatePet);
 router.get('/all', getAllPets);
 router.get('/:id', getPetById);
 
