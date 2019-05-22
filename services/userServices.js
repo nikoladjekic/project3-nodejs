@@ -2,8 +2,7 @@ const User = require('../models/User');
 const logger = require('../util/logger');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+
 
 /******* CREATE USER ********/
 const addUser = (req, res, next) => {
@@ -69,6 +68,7 @@ const deleteUser = (req, res, next) => {
         })
 };
 
+/******* UPDATE USER  ********/
 const updateUser = (req, res) => {
     logger.info('Update user by ID : ' + req.body._id);
     User.updateOne({ _id: req.body._id }, req.body)
@@ -86,6 +86,7 @@ const updateUser = (req, res) => {
 
 };
 
+/******* LOGIN  ********/
 const login = (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
