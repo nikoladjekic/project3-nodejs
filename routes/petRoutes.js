@@ -3,21 +3,25 @@ const {
     forwardJsonPetData,
     deletePetJson,
     updatePetJson
-} = require('../services/sendPetDataToMongoJSON');
+} = require('../services/forwardPetDataFromJSON');
+
+const {
+    fileToJsonCreatePet
+} = require('../services/forwardPetDataFromFILE');
 
 const upload = require('../util/multer-config');
-const csv = require('csvtojson');
 
 const router = express.Router();
 
+
+// forward json data
 router.post('/json', forwardJsonPetData);
 router.delete('/json/:id', deletePetJson);
 router.put('/json', updatePetJson);
 
 
-router.post("/file", upload.single('fileUpload'), (req, res) => {
-    console.log(req.file);
-    res.send(req.file.buffer.toString());
-});
+// read from file and forward as json object
+router.post("/file", upload.single('fileUpload'), fileToJsonCreatePet);
+
 
 module.exports = router;
