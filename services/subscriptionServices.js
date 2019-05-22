@@ -82,15 +82,28 @@ const updateSubscription = (req, res, next) => {
 };
 
 /******* CHECK SUBSCRIPTION ********/
-const checkSubscription = (req,res,next) => {
+const checkSubscription = (req, res, next) => {
     let username = req.username;
     let url = req.originalUrl;
     let object = req.body;
     let keys_with_id = Object.keys(object);
     let url_collection = url.split('/');
     let collection_name = url_collection[1];
-    
-    let keys = keys_with_id.filter( function (key){
+
+
+    let update_id;
+
+    if (req.method === "DELETE") {
+        update_id = req.params.id;
+
+    } else if (req.method === "PUT") {
+        update_id = req.body._id;
+
+    } else {
+        logger.error('Unsuported method for subscription');
+    }
+
+    let keys = keys_with_id.filter(function (key) {
         return key !== "_id";
     });
 
@@ -98,62 +111,62 @@ const checkSubscription = (req,res,next) => {
         .then(user => {
             if (user.length > 0) {
                 let user_id = user[0]._id;
-                let query = {$and:[{user_id: user_id},{'subject.collection.name': collection_name}]};
-                
+                let query = { $and: [{ user_id: user_id }, { 'subject.collection.name': collection_name }] };
+
                 Subscription.find(query)
-                .then(subscription => {
-                    if(subscription.length > 0){
-                    
-                        let idPatterns = subscription[0].subject.entities.idPattern;
-                        let attrs= subscription[0].subject.condition.attrs;
-                        let attrs_subscribed = false;
-                        let idPatterns_subscribed = false;
+                    .then(subscription => {
+                        if (subscription.length > 0) {
 
-                        if(idPatterns[0] === "*") {
-                            idPatterns_subscribed = true;
-                        }else if(idPatterns.includes(req.body._id)){
-                            idPatterns_subscribed = true;
-                        }else{
-                            idPatterns_subscribed = false;
-                            console.log('Unsupported documents' + idPatterns + ' id: ' + req.body._id);
-                            logger.error('Unsupported documents');
-                        }
+                            let idPatterns = subscription[0].subject.entities.idPattern;
+                            let attrs = subscription[0].subject.condition.attrs;
+                            let attrs_subscribed = false;
+                            let idPatterns_subscribed = false;
 
-                        if(attrs[0] === "*"){
-                            attrs_subscribed = true;
-                        }else if(keys.every((val) => { return attrs.includes(val) })){
-                            attrs_subscribed = true;
-                        }else{
-                            attrs_subscribed = false;
-                            console.log('Unsupported attributes ' + attrs + ' keys: ' + keys);
-                            logger.error('Unsupported attributes');
-                        }
+                            if (idPatterns[0] === "*") {
+                                idPatterns_subscribed = true;
+                            } else if (idPatterns.includes(update_id)) {
+                                idPatterns_subscribed = true;
+                            } else {
+                                idPatterns_subscribed = false;
+                                console.log('Unsupported documents' + idPatterns + ' id: ' + req.body._id);
+                                logger.error('Unsupported documents');
+                            }
 
-                        if(idPatterns_subscribed === true && attrs_subscribed === true){
-                            req.subscribed = true; 
-                        }else{
-                            req.subscribed = undefined;
-                            console.log('User is not subscribed for this action');
-                            logger.error('User is not subscribed for this action');
+                            if (attrs[0] === "*") {
+                                attrs_subscribed = true;
+                            } else if (keys.every((val) => { return attrs.includes(val) })) {
+                                attrs_subscribed = true;
+                            } else {
+                                attrs_subscribed = false;
+                                console.log('Unsupported attributes ' + attrs + ' keys: ' + keys);
+                                logger.error('Unsupported attributes');
+                            }
+
+                            if (idPatterns_subscribed === true && attrs_subscribed === true) {
+                                req.subscribed = true;
+                            } else {
+                                req.subscribed = undefined;
+                                console.log('User is not subscribed for this action');
+                                logger.error('User is not subscribed for this action');
+                            }
+                            next();
+                        } else {
+                            console.log('Can not find subscription for user with ID: ' + user_id);
+                            logger.error('Can not find  subscription for user by ID: ' + user_id);
                         }
-                        next();
-                    }else{
-                        console.log('Can not find subscription for user with ID: ' + user_id );
-                        logger.error('Can not find  subscription for user by ID: '+ user_id);
-                    }
-                })
-                .catch((err) => {
-                   console.log('Can not find subscription for user by ID: '+ user_id + 'Error: ' + err);
-                   logger.error('Can not find  subscription for user by ID: '+ user_id + 'Error: ' + err);
-                })
+                    })
+                    .catch((err) => {
+                        console.log('Can not find subscription for user by ID: ' + user_id + 'Error: ' + err);
+                        logger.error('Can not find  subscription for user by ID: ' + user_id + 'Error: ' + err);
+                    })
             } else {
                 console.log('Username is not valid' + err);
                 logger.error('Username is not valid' + err);
             }
         })
         .catch((err) => {
-            console.log('Can not find user by username '+ username + 'Error: ' + err);
-            logger.error('Can not find user by username '+ username);
+            console.log('Can not find user by username ' + username + 'Error: ' + err);
+            logger.error('Can not find user by username ' + username);
         })
 };
 

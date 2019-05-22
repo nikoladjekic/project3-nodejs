@@ -14,10 +14,14 @@ const {
     isAuth
 } = require('../services/userServices');
 
+const {
+    checkSubscription
+} = require('../services/subscriptionServices');
+
 
 router.post('/', createPet);
-router.delete('/:id', verifyToken, isAuth, deletePetById);
-router.put('/', verifyToken, isAuth, updatePet);
+router.delete('/:id', verifyToken, isAuth, checkSubscription, deletePetById);
+router.put('/', verifyToken, isAuth, checkSubscription, updatePet);
 router.get('/all', getAllPets);
 router.get('/:id', getPetById);
 

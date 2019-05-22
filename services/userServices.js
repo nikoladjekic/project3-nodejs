@@ -58,7 +58,7 @@ const deleteUser = (req, res, next) => {
         .then(user => {
             console.log(user);
             if (user.deletedCount > 0) {
-                res.status(200).send(user);
+                res.status(200).send({ "subscribed": req.subscribed });
             } else {
                 res.status(404).send(`Can not find user with ID ${user_id}.`);
             }
@@ -74,9 +74,9 @@ const updateUser = (req, res) => {
     User.updateOne({ _id: req.body._id }, req.body)
         .then(function (user) {
             if (user.nModified < 1) {
-                res.status(404).send("User is not modified");
+                res.status(404).send({ "subscribed": req.subscribed });
             } else {
-                res.send(user);
+                res.send({ "subscribed": req.subscribed });
             }
         }).catch(function (err) {
             logger.error("Cannot update user - " + err);
