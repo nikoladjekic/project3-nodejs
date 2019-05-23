@@ -19,7 +19,12 @@ const Pet = sequelize.define('pet', {
   status: {
     type: Sequelize.ENUM,
     values: ["AVAILABLE", "PENDING", "SOLD"]
+  },
+  _id: {
+    type: Sequelize.STRING,
+    allowNull: false
   }
+
 });
 
 
