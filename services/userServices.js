@@ -33,8 +33,11 @@ const getUserById = (req, res, next) => {
     User.findOne({ where: { id: req.params.id } }).
         then(
             user => {
-                logger.info("User has been found by id");
-                res.status(200).send(user)
+                if (!user) { res.status(404).send("User with requested id does not exist") }
+                else {
+                    logger.info("User has been found by id");
+                    res.status(200).send(user)
+                }
             }
         ).catch(
             err => {
@@ -47,9 +50,12 @@ const getUserById = (req, res, next) => {
 const deleteUser = (req, res, next) => {
     User.destroy({ where: { id: req.params.id } }).
         then(
-            () => {
-                logger.info("User has been successfully deleted");
-                res.status(200).send("User has been successfully deleted")
+            (user) => {
+                if (user) {
+                    logger.info("User has been successfully deleted");
+                    res.status(200).send("User has been successfully deleted")
+                }
+                else { res.status(404).send("You entered invalid id") }
             }
         ).catch(
             err => {
@@ -73,9 +79,12 @@ const updateUser = (req, res, next) => {
         },
             { where: { id: req.params.id } }).
             then(
-                () => {
-                    logger.info("User has been successfully updated");
-                    res.status(200).send("User has been successfully updated")
+                (user) => {
+                    if (user) {
+                        logger.info("User has been successfully updated");
+                        res.status(200).send("User has been successfully updated")
+                    }
+                    else { res.status(404).send("You provided bad id mate") }
                 }
             ).catch(
                 err => {

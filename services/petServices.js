@@ -29,11 +29,14 @@ const getPets = (req, res, next) => {
 }
 
 const getPetById = (req, res, next) => {
-    Pet.findOne({where:{id:req.params.id}}).
+    Pet.findOne({ where: { id: req.params.id } }).
         then(
-           pet => {
-                logger.info("Pet has been found by id");
-                res.status(200).send(pet)
+            pet => {
+                if (!pet) { res.status(404).send("Pet with requested id does not exist") }
+                else {
+                    logger.info("Pet has been found by id");
+                    res.status(200).send(pet)
+                }
             }
         ).catch(
             err => {
@@ -44,12 +47,15 @@ const getPetById = (req, res, next) => {
 }
 
 
-const deletePet= (req, res, next) => {
-    Pet.destroy({where:{id:req.params.id}}).
+const deletePet = (req, res, next) => {
+    Pet.destroy({ where: { id: req.params.id } }).
         then(
-            () => {
-                logger.info("Pet has been successfully deleted");
-                res.status(200).send("Pet has been successfully deleted")
+            (pet) => {
+                if (pet) {
+                    logger.info("Pet has been successfully deleted");
+                    res.status(200).send("Pet has been successfully deleted")
+                }
+                else { res.status(404).send("You provided bad id") }
             }
         ).catch(
             err => {
@@ -70,9 +76,12 @@ const updatePet = (req, res, next) => {
         },
             { where: { id: req.params.id } }).
             then(
-                () => {
-                    logger.info("Pet has been successfully updated");
-                    res.status(200).send("Pet has been successfully updated")
+                (pet) => {
+                    if (pet) {
+                        logger.info("Pet has been successfully updated");
+                        res.status(200).send("Pet has been successfully updated")
+                    }
+                    else { res.status(404).send("You provided bad id mate") }
                 }
             ).catch(
                 err => {
